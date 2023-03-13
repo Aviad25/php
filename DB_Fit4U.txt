@@ -1,0 +1,168 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.0
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Jan 31, 2023 at 06:30 AM
+-- Server version: 10.4.27-MariaDB
+-- PHP Version: 8.1.12
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+--
+-- Database: `fit4u`
+--
+CREATE DATABASE IF NOT EXISTS `fit4u` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `fit4u`;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `admin`
+--
+
+DROP TABLE IF EXISTS `admin`;
+CREATE TABLE IF NOT EXISTS `admin` (
+  `user_id` smallint(6) NOT NULL AUTO_INCREMENT,
+  `user_name` varchar(25) DEFAULT NULL,
+  `user_password` varchar(25) DEFAULT NULL,
+  `user_phone` varchar(11) DEFAULT NULL,
+  `user_email` varchar(50) DEFAULT NULL,
+  `user_adress` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `admin`
+--
+
+INSERT INTO `admin` (`user_id`, `user_name`, `user_password`, `user_phone`, `user_email`, `user_adress`) VALUES
+(1, 'Aviad', '1234', '0507878788', 'aviad.25@hotmail.com', 'unknown'),
+(2, 'Saleh', 'Saleh', '0506569995', 'salihsaed8@gmail.com', 'Nahef');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cart`
+--
+
+DROP TABLE IF EXISTS `cart`;
+CREATE TABLE IF NOT EXISTS `cart` (
+  `cart_id` smallint(6) NOT NULL AUTO_INCREMENT,
+  `cart_totalprice` varchar(25) DEFAULT NULL,
+  `cart_date` date DEFAULT NULL,
+  `cus_id` smallint(6) NOT NULL,
+  PRIMARY KEY (`cart_id`),
+  KEY `cus_id` (`cus_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `customer`
+--
+
+DROP TABLE IF EXISTS `customer`;
+CREATE TABLE IF NOT EXISTS `customer` (
+  `cus_id` smallint(11) NOT NULL AUTO_INCREMENT,
+  `cus_name` varchar(25) DEFAULT NULL,
+  `cus_phone` varchar(11) DEFAULT NULL,
+  `cus_adress` varchar(50) DEFAULT NULL,
+  `cus_email` varchar(50) DEFAULT NULL,
+  `cus_password` varchar(50) DEFAULT NULL,
+  `cus_gender` enum('female','male','n/a') DEFAULT NULL,
+  PRIMARY KEY (`cus_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `customer`
+--
+
+INSERT INTO `customer` (`cus_id`, `cus_name`, `cus_phone`, `cus_adress`, `cus_email`, `cus_password`, `cus_gender`) VALUES
+(1, 'Saleh', '0123456789', 'nahef', 'salihsaeed48@gmail.com', '1234', 'male'),
+(2, 'Saleh', '1324567890', 'Nahef', 'saleh@gmail.com', '123456', 'male'),
+(3, 'Aviad', '213121231', 'kdsjdkj', 'aviad.25@hotmail.com', '123456', 'male'),
+(4, 'Saleh', '025896314', 'Nahef', 'salih8@gmail.com', '1234', 'male'),
+(5, 'Saleh', '11111111111', 'Nahef', 'salih7@gmail.com', '1234', 'male');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `customerproducts`
+--
+
+DROP TABLE IF EXISTS `customerproducts`;
+CREATE TABLE IF NOT EXISTS `customerproducts` (
+  `cus_id` smallint(6) NOT NULL,
+  `prod_id` smallint(6) NOT NULL,
+  PRIMARY KEY (`cus_id`,`prod_id`),
+  KEY `prod_id` (`prod_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payment`
+--
+
+DROP TABLE IF EXISTS `payment`;
+CREATE TABLE IF NOT EXISTS `payment` (
+  `visa` varchar(16) DEFAULT NULL,
+  `cart_id` smallint(6) NOT NULL,
+  KEY `cart_id` (`cart_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product`
+--
+
+DROP TABLE IF EXISTS `product`;
+CREATE TABLE IF NOT EXISTS `product` (
+  `prod_id` smallint(11) NOT NULL AUTO_INCREMENT,
+  `prod_desc` varchar(100) DEFAULT NULL,
+  `prod_img` varchar(255) DEFAULT NULL,
+  `prod_price` varchar(20) DEFAULT NULL,
+  `prod_quan` varchar(20) DEFAULT NULL,
+  `prod_gender` varchar(10) DEFAULT NULL,
+  PRIMARY KEY (`prod_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `product`
+--
+
+INSERT INTO `product` (`prod_id`, `prod_desc`, `prod_img`, `prod_price`, `prod_quan`, `prod_gender`) VALUES
+(44, 'white jacket', 'uploads/6.jpg', '69.99$', '10', 'men'),
+(47, 'Paleblue long sleeve shirt', 'uploads/2.jpg', '37.99$', '10', 'women'),
+(48, 'white long sleeve shirt', 'uploads/3.jpg', '32.99$', '5', 'women'),
+(49, 'Black long sleeve shirt', 'uploads/1.jpg', '69.99$', '7', 'women'),
+(50, 'Black jacket', 'uploads/4.jpg', '49.99$', '5', 'men'),
+(51, 'Gray jacket', 'uploads/5.jpg', '35.99$', '6', 'men');
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `cart`
+--
+ALTER TABLE `cart`
+  ADD CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`cus_id`) REFERENCES `customer` (`cus_id`);
+
+--
+-- Constraints for table `customerproducts`
+--
+ALTER TABLE `customerproducts`
+  ADD CONSTRAINT `customerproducts_ibfk_1` FOREIGN KEY (`cus_id`) REFERENCES `customer` (`cus_id`),
+  ADD CONSTRAINT `customerproducts_ibfk_2` FOREIGN KEY (`prod_id`) REFERENCES `product` (`prod_id`);
+
+--
+-- Constraints for table `payment`
+--
+ALTER TABLE `payment`
+  ADD CONSTRAINT `payment_ibfk_1` FOREIGN KEY (`cart_id`) REFERENCES `cart` (`cart_id`);
+COMMIT;
